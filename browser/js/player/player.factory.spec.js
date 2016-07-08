@@ -39,7 +39,7 @@ describe('`PlayerFactory` factory', function () {
 
   describe('#start', function () {
 
-    it('plays given song', function () {
+    xit('plays given song', function () {
       chai.spy.on(HTMLAudioElement.prototype, 'load');
       chai.spy.on(HTMLAudioElement.prototype, 'play');
       PlayerFactory.start(song1);
@@ -47,7 +47,7 @@ describe('`PlayerFactory` factory', function () {
       expect(HTMLAudioElement.prototype.play).to.have.been.called();
     });
 
-    it('stops previous song when playing new song', function () {
+    xit('stops previous song when playing new song', function () {
       chai.spy.on(PlayerFactory, 'pause');
       chai.spy.on(HTMLAudioElement.prototype, 'play');
       PlayerFactory.start(song1);
@@ -58,9 +58,9 @@ describe('`PlayerFactory` factory', function () {
 
   });
 
-  xdescribe('#pause', function () {
+  describe('#pause', function () {
 
-    it("calls audio's `pause`", function () {
+    xit("calls audio's `pause`", function () {
       chai.spy.on(HTMLAudioElement.prototype, 'pause');
       PlayerFactory.pause();
       expect(HTMLAudioElement.prototype.pause).to.have.been.called();
@@ -68,9 +68,9 @@ describe('`PlayerFactory` factory', function () {
 
   });
 
-  xdescribe('#resume', function () {
+  describe('#resume', function () {
 
-    it("calls audio's `play`", function () {
+    xit("calls audio's `play`", function () {
       chai.spy.on(HTMLAudioElement.prototype, 'play');
       PlayerFactory.resume();
       expect(HTMLAudioElement.prototype.play).to.have.been.called();
@@ -78,18 +78,18 @@ describe('`PlayerFactory` factory', function () {
 
   });
 
-  xdescribe('#isPlaying', function () {
+  describe('#isPlaying', function () {
 
-    it('returns false when song is not playing', function () {
+    xit('returns false when song is not playing', function () {
       expect(PlayerFactory.isPlaying()).to.equal(false);
     });
 
-    it('returns true when song is playing', function () {
+    xit('returns true when song is playing', function () {
       PlayerFactory.start(song1);
       expect(PlayerFactory.isPlaying()).to.equal(true);
     });
 
-    it('toggles with pause/resume', function () {
+    xit('toggles with pause/resume', function () {
       PlayerFactory.start(song1);
       expect(PlayerFactory.isPlaying()).to.equal(true);
       PlayerFactory.pause();
@@ -100,18 +100,18 @@ describe('`PlayerFactory` factory', function () {
 
   });
 
-  xdescribe('#getCurrentSong', function () {
+  describe('#getCurrentSong', function () {
 
-    it('defaults to null', function () {
+    xit('defaults to null', function () {
       expect(PlayerFactory.getCurrentSong()).to.equal(null);
     });
 
-    it('returns the song that is playing', function () {
+    xit('returns the song that is playing', function () {
       PlayerFactory.start(song1);
       expect(PlayerFactory.getCurrentSong()).to.equal(song1);
     });
 
-    it('returns the current song even when paused', function () {
+    xit('returns the current song even when paused', function () {
       PlayerFactory.start(song1);
       PlayerFactory.pause();
       expect(PlayerFactory.getCurrentSong()).to.equal(song1);
@@ -119,7 +119,7 @@ describe('`PlayerFactory` factory', function () {
 
   });
 
-  xdescribe('#next', function () {
+  describe('#next', function () {
 
     var songList;
 
@@ -144,7 +144,7 @@ describe('`PlayerFactory` factory', function () {
 
   });
 
-  xdescribe('#previous', function () {
+  describe('#previous', function () {
 
     var songList;
 
@@ -170,13 +170,13 @@ describe('`PlayerFactory` factory', function () {
   });
 
 
-  xdescribe('#getProgress', function () {
+  describe('#getProgress', function () {
 
-    it('is 0 before playing song', function () {
+    xit('is 0 before playing song', function () {
       expect(PlayerFactory.getProgress()).to.equal(0);
     });
 
-    it('is a decimal between 0 and 1 corresponding to audio play progress', function (done) {
+    xit('is a decimal between 0 and 1 corresponding to audio play progress', function (done) {
       this.timeout(5000);
       audioMock.addEventListener('playing', function () {
         setTimeout(function () {
@@ -187,7 +187,7 @@ describe('`PlayerFactory` factory', function () {
       PlayerFactory.start(song1);
     });
 
-    it('stays stable when paused', function (done) {
+    xit('stays stable when paused', function (done) {
       this.timeout(1000);
       audioMock.addEventListener('playing', function () {
         setTimeout(PlayerFactory.pause, 100);
