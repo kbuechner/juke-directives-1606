@@ -1,85 +1,83 @@
 'use strict';
 
-juke.factory('PlayerFactory', function($rootScope){
-	var player = {};
-	var currentSong = null;
-	var playing = false;
-	var audio = document.createElement('audio');
-	var progress = 0;
-	var songs = [];
-	var index = 0;
+juke.factory('PlayerFactory', function ($rootScope) {
 
-	audio.addEventListener("ended", function(){
-		player.next();
-	})
-  
-  	audio.addEventListener('timeupdate', function () {
-    	progress = audio.currentTime / audio.duration;
-	});
+  // state
 
-	player.start = function(song, songList){
-		progress = 0;
-		audio.pause();
-		audio.src = song.audioUrl;
-		audio.load();
-		audio.play();
-		
-		playing = true;
-		currentSong = song;
+  var playing = false,
+      currentSong = null,
+      currentList = [],
+      progress = 0;
 
-		if(songList){
-			songs = songList;
-		}
-		else
-			songs = [song];
-		index = songs.indexOf(song)
-		console.log(songs)
-	}
+  // initialize the audio element
 
-	player.pause = function(){
-		audio.pause();
-		playing = false;
-	}
+  var audio = document.createElement('audio');
 
-	player.resume = function(){
-		audio.play();
-		playing = true;
-	}
+  // define the factory value
 
-	player.isPlaying = function(){
-		return playing;
-	}
+  var player = {};
 
-	player.getCurrentSong = function(){
-		return currentSong;
-	}
+  player.pause = function () {
+    audio.pause();
+    playing = false;
+  };
 
-	player.next = function () {
-		progress = 0;
+  player.resume = function () {
+    audio.play();
+    playing = true;
+  };
 
-		if(index===songs.length - 1){
-			index = 0;
-			player.start(songs[0], songs)
-		}
-		else
-			player.start(songs[index+1], songs)
-	}
+  player.start = function (song, list) {
+    player.pause();
+    audio.src = song.audioUrl;
+    audio.load();
+    currentSong = song;
+    currentList = list;
+    player.resume();
+  };
 
-	player.previous = function(){
-		progress = 0;
+  player.isPlaying = function () {
+    return playing;
+  };
 
-		if(index===0){
-			index = songs.length-1;
-			player.start(songs[index], songs)
-		}
-		else
-			player.start(songs[index-1], songs)
-	}
+  player.getCurrentSong = function () {
+    return currentSong;
+  };
 
-	player.getProgress = function(){
-		return progress;
-	}
+  function mod (num, m) { return ((num % m) + m) % m; };
 
-	return player;
-  // non-UI logic in here
+  function skip (interval) {
+    var index = currentList.indexOf(currentSong);
+    index = mod(index + interval, currentList.length);
+    player.start(currentList[index], currentList);
+  }
+
+  player.next = function () {
+    skip(1);
+  };
+
+  player.previous = function () {
+    skip(-1);
+  };
+
+  player.getProgress = function () {
+    return progress;
+  };
+
+  // audio event listening
+
+  audio.addEventListener('ended', function () {
+    player.next();
+    $rootScope.$evalAsync();
+  });
+
+  audio.addEventListener('timeupdate', function () {
+    progress = audio.currentTime / audio.duration;
+    $rootScope.$evalAsync();
+  });
+
+  // return factory value
+
+  return player;
+
 });

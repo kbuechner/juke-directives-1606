@@ -3,12 +3,10 @@ var expect = chai.expect;
 describe('`PlayerFactory` factory', function () {
   beforeEach(module('juke')); // loads our app
 
-  var SONG1_DURATION_SECS = 105;
-
   var song1, song2;
   before(function () {
-    song1 = { audioUrl: 'https://learndotresources.s3.amazonaws.com/workshop/561bcd7fe305540300446092/sample1.mp3' };
-    song2 = { audioUrl: 'https://learndotresources.s3.amazonaws.com/workshop/561bcd7fe305540300446092/sample2.mp3' };
+    song1 = { audioUrl: 'http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3' };
+    song2 = { audioUrl: 'http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3' };
   });
 
   var audioMock, PlayerFactory;
@@ -39,7 +37,7 @@ describe('`PlayerFactory` factory', function () {
 
   describe('#start', function () {
 
-    xit('plays given song', function () {
+    it('plays given song', function () {
       chai.spy.on(HTMLAudioElement.prototype, 'load');
       chai.spy.on(HTMLAudioElement.prototype, 'play');
       PlayerFactory.start(song1);
@@ -47,7 +45,7 @@ describe('`PlayerFactory` factory', function () {
       expect(HTMLAudioElement.prototype.play).to.have.been.called();
     });
 
-    xit('stops previous song when playing new song', function () {
+    it('stops previous song when playing new song', function () {
       chai.spy.on(PlayerFactory, 'pause');
       chai.spy.on(HTMLAudioElement.prototype, 'play');
       PlayerFactory.start(song1);
@@ -60,7 +58,7 @@ describe('`PlayerFactory` factory', function () {
 
   describe('#pause', function () {
 
-    xit("calls audio's `pause`", function () {
+    it("calls audio's `pause`", function () {
       chai.spy.on(HTMLAudioElement.prototype, 'pause');
       PlayerFactory.pause();
       expect(HTMLAudioElement.prototype.pause).to.have.been.called();
@@ -70,7 +68,7 @@ describe('`PlayerFactory` factory', function () {
 
   describe('#resume', function () {
 
-    xit("calls audio's `play`", function () {
+    it("calls audio's `play`", function () {
       chai.spy.on(HTMLAudioElement.prototype, 'play');
       PlayerFactory.resume();
       expect(HTMLAudioElement.prototype.play).to.have.been.called();
@@ -80,16 +78,16 @@ describe('`PlayerFactory` factory', function () {
 
   describe('#isPlaying', function () {
 
-    xit('returns false when song is not playing', function () {
+    it('returns false when song is not playing', function () {
       expect(PlayerFactory.isPlaying()).to.equal(false);
     });
 
-    xit('returns true when song is playing', function () {
+    it('returns true when song is playing', function () {
       PlayerFactory.start(song1);
       expect(PlayerFactory.isPlaying()).to.equal(true);
     });
 
-    xit('toggles with pause/resume', function () {
+    it('toggles with pause/resume', function () {
       PlayerFactory.start(song1);
       expect(PlayerFactory.isPlaying()).to.equal(true);
       PlayerFactory.pause();
@@ -102,16 +100,16 @@ describe('`PlayerFactory` factory', function () {
 
   describe('#getCurrentSong', function () {
 
-    xit('defaults to null', function () {
+    it('defaults to null', function () {
       expect(PlayerFactory.getCurrentSong()).to.equal(null);
     });
 
-    xit('returns the song that is playing', function () {
+    it('returns the song that is playing', function () {
       PlayerFactory.start(song1);
       expect(PlayerFactory.getCurrentSong()).to.equal(song1);
     });
 
-    xit('returns the current song even when paused', function () {
+    it('returns the current song even when paused', function () {
       PlayerFactory.start(song1);
       PlayerFactory.pause();
       expect(PlayerFactory.getCurrentSong()).to.equal(song1);
@@ -172,22 +170,23 @@ describe('`PlayerFactory` factory', function () {
 
   describe('#getProgress', function () {
 
-    xit('is 0 before playing song', function () {
+    it('is 0 before playing song', function () {
       expect(PlayerFactory.getProgress()).to.equal(0);
     });
 
-    xit('is a decimal between 0 and 1 corresponding to audio play progress', function (done) {
+    it('is a decimal between 0 and 1 corresponding to audio play progress', function (done) {
       this.timeout(5000);
       audioMock.addEventListener('playing', function () {
         setTimeout(function () {
-          expect(PlayerFactory.getProgress()).to.be.closeTo(1/SONG1_DURATION_SECS, 0.01);
+          // the song is about 59 seconds long
+          expect(PlayerFactory.getProgress()).to.be.closeTo(1.5/59, 0.01);
           done();
-        }, 1000);
+        }, 1500);
       });
       PlayerFactory.start(song1);
     });
 
-    xit('stays stable when paused', function (done) {
+    it('stays stable when paused', function (done) {
       this.timeout(1000);
       audioMock.addEventListener('playing', function () {
         setTimeout(PlayerFactory.pause, 100);

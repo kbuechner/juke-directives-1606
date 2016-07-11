@@ -1,42 +1,30 @@
 'use strict';
 
-juke.factory('AlbumFactory', function($http){
-	var singleAlbum = {};
-	singleAlbum.fetchById = function (albumId){
-		return $http.get('/api/albums/' + albumId)
-  		.then(function (res) { 
-  			return res.data; })
-		.then(function (album) {
-	    	album.imageUrl = '/api/albums/' + album.id + '/image';
-    		album.songs.forEach(function (song, i) {
-      			song.audioUrl = '/api/songs/' + song.id + '/audio';
-      		song.albumIndex = i;
-    		});
-    		return album
-		})
-	}
+juke.factory('AlbumFactory', function ($http, SongFactory) {
 
-	return singleAlbum;
+  var AlbumFactory = {};
+
+  AlbumFactory.fetchAll = function () {
+    return $http.get('/api/albums')
+    .then(function (response) { return response.data; })
+    .then(function (albums) { return albums.map(AlbumFactory.convert); });
+  };
+
+  AlbumFactory.fetchById = function (id) {
+    return $http.get('/api/albums/' + 1)
+    .then(function (response) { return response.data; })
+    .then(AlbumFactory.convert)
+    .then(function (album) {
+      album.songs = album.songs.map(SongFactory.convert);
+      return album;
+    });
+  };
+
+  AlbumFactory.convert = function (album) {
+    album.imageUrl = '/api/albums/' + album.id + '/image';
+    return album;
+  };
+
+  return AlbumFactory;
+
 });
-
-juke.factory('AlbumsFactory', function($http, AlbumFactory){
-	var albums = {};
-	albums.fetchAll = function(){
-		return $http.get('/api/albums/')
-		.then(function(res){
-			return res.data;
-		})
-		.then(function(modifiedAlbums){
-			var returnAlbums = [];
-			for(var x=0; x<modifiedAlbums.length; x++){
-				AlbumFactory.fetchById(modifiedAlbums[x].id)
-				.then(function(foundAlbum){
-					returnAlbums.push(foundAlbum);
-				})
-			}
-			return returnAlbums
-		})
-	}
-
-	return albums;
-})
