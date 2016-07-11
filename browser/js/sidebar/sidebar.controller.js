@@ -1,13 +1,7 @@
 'use strict';
 
-juke.controller('SidebarCtrl', function ($scope, $rootScope) {
+juke.controller('SidebarCtrl', function ($scope) {
 
-  $scope.viewAlbums = function () {
-    $rootScope.$broadcast('viewSwap', { name: 'allAlbums'});
-  };
-
-  $scope.viewAllArtists = function () {
-    $rootScope.$broadcast('viewSwap', { name: 'allArtists' });
-  };
+  // nothing to see here for now… state transitions happening with ui-sref!
 
 });

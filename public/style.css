@@ -44,6 +44,8 @@ footer {
   footer .bar {
     overflow: hidden;
     padding: 9px; }
+  footer .progress {
+    cursor: pointer; }
   footer .progress-bar {
     transition: none !important; }
 

@@ -3,10 +3,12 @@ var expect = chai.expect;
 describe('`PlayerFactory` factory', function () {
   beforeEach(module('juke')); // loads our app
 
+  var SONG1_DURATION_SECS = 105;
+
   var song1, song2;
   before(function () {
-    song1 = { audioUrl: 'http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3' };
-    song2 = { audioUrl: 'http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3' };
+    song1 = { audioUrl: 'https://learndotresources.s3.amazonaws.com/workshop/561bcd7fe305540300446092/sample1.mp3' };
+    song2 = { audioUrl: 'https://learndotresources.s3.amazonaws.com/workshop/561bcd7fe305540300446092/sample2.mp3' };
   });
 
   var audioMock, PlayerFactory;
@@ -178,10 +180,9 @@ describe('`PlayerFactory` factory', function () {
       this.timeout(5000);
       audioMock.addEventListener('playing', function () {
         setTimeout(function () {
-          // the song is about 59 seconds long
-          expect(PlayerFactory.getProgress()).to.be.closeTo(1.5/59, 0.01);
+          expect(PlayerFactory.getProgress()).to.be.closeTo(1/SONG1_DURATION_SECS, 0.01);
           done();
-        }, 1500);
+        }, 1000);
       });
       PlayerFactory.start(song1);
     });

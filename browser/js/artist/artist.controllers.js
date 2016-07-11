@@ -2,19 +2,17 @@
 
 /* ARTISTS (PLURAL) CONTROLLER */
 
-juke.controller('ArtistsCtrl', function ($scope, $log, ArtistFactory) {
+juke.controller('ArtistsCtrl', function ($scope, allArtists) {
 
-  ArtistFactory.fetchAll()
-  .then(function (artists) {
-    $scope.artists = artists;
-  })
-  .catch($log.error);
+  $scope.artists = allArtists;
 
 });
 
 /* ARTIST (SINGULAR) CONTROLLER */
 
-juke.controller('ArtistCtrl', function ($scope, $log, ArtistFactory, PlayerFactory) {
+juke.controller('ArtistCtrl', function ($scope, PlayerFactory, theArtist) {
+
+  $scope.artist = theArtist;
 
   $scope.getCurrentSong = function () {
     return PlayerFactory.getCurrentSong();
@@ -33,4 +31,5 @@ juke.controller('ArtistCtrl', function ($scope, $log, ArtistFactory, PlayerFacto
       PlayerFactory.resume();
     }
   };
+
 });

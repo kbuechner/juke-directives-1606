@@ -64,6 +64,10 @@ juke.factory('PlayerFactory', function ($rootScope) {
     return progress;
   };
 
+  player.seek = function (decimal) {
+    audio.currentTime = audio.duration * decimal;
+  };
+
   // audio event listening
 
   audio.addEventListener('ended', function () {
