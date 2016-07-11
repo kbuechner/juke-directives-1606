@@ -1,0 +1,35 @@
+ANGULAR FORMS
+can put ng-model on any attribute directive
+
+based on type of input element
+put field on scope property
+
+2-way binding
+if something changes scope.creditcardnumber it changes the text
+
+<input type = "text" ngmodel = "creditcardnumber">
+
+select ng-model - "card.type"> means scope.card.type
+
+don't need to add card.type to scope
+creates an ng object
+
+angular is very forgiving
+
+<select ng-model="card.type">
+	<option>Visa</option>
+	<option>Mastercard</option>
+</select>
+<input type="text" ng-model = "card.number">
+
+^^^^
+||||
+\\\\ good pattern
+
+ngModelController (creates little controllers)
+	- upshot: doesn't directly act or reaact with ocntroller
+if we name the form, now there's a $scope.xxForm that exists
+
+ng-options
+
+
