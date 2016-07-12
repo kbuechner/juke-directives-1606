@@ -1,17 +1,25 @@
 <div class="well">
-  <form class="form-horizontal">
+  <form class="form-horizontal" ng-submit="submit()"  name="playlistForm" novalidate>
     <fieldset>
       <legend>New Playlist</legend>
+      <form>
       <div class="form-group">
-        <label class="col-xs-2 control-label">Name</label>
+        <label class="col-xs-2 control-label">Title</label>
         <div class="col-xs-10">
-          <input ng-models="playlist.name" class="form-control" type="text" ng-required="true" ng-maxlength="16">
+          <input name="inputName" class="form-control" type = "text" ng-model="newPlaylist.name" ng-maxlength="20" required>
         </div>
-
+      </div>
+      <div class="col-xs-10">
+        <div class="alert alert-warning" ng-show="playlistForm.inputName.$touched &&playlistForm.inputName.$error.required">
+          <p>The title is required.</p>
+        </div>
+        <div class="alert alert-warning" ng-show="playlistForm.inputName.$error.maxlength">
+        <p>The title cannot be longer than 20 characters.</p>
+        </div>
       </div>
       <div class="form-group">
         <div class="col-xs-10 col-xs-offset-2">
-          <button type="submit" class="btn btn-active" ng-disabled="playlist.name.$invalid">Create Playlist</button>
+        <button ng-disabled="playlistForm.$invalid" type ="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> CREATE</button>
         </div>
       </div>
     </fieldset>

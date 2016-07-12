@@ -1,15 +1,30 @@
 'use strict'
 
-juke.controller('PlaylistFormCtrl', function($scope,state){
-	$scope.createPlaylist = function () {
-		$scope.hasSubmitted = true;
+juke.controller('PlaylistFormCtrl', function($scope, PlaylistFactory){
+	
+	$scope.submit = function(){
+		if($scope.playlistForm.$invalid){
+			return;
+		}
+
 		PlaylistFactory.create($scope.newPlaylist)
-		.then(function(playlist){
-			$state.go('playlist', { name: playlist.name })
+		.then(function(createdPlaylist){
+			console.log(createdPlaylist)
+			$scope.newPlaylist={};
+			$scope.playlistForm.$setPristine();
+			$scope.playlistForm.$setUntouched();
 		})
-		.catch(function(err){
-			$scope.hasSubmitted = false;
-			$scope.serverError = err.message || "Something went wrong!";
-		});
-	};
+	}
+})
+
+juke.controller('PlaylistsCtrl', function($scope, $log, PlaylistFactory){
+	
+	PlaylistFactory.fetchAll()
+	.then(function(playlists){
+		$scope.playlists = playlists;
+
+	})
+	.catch(function(err){
+		console.error(err)
+	})
 })
